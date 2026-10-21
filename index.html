@@ -193,6 +193,61 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
 .lvl button[aria-pressed="true"]{background:#FCC46A}
 .lvl button:disabled{cursor:default;opacity:.75}
 .lvl button[aria-pressed="true"] i{display:block}
+/* DROPDOWN */
+.dd{position:relative}
+.dd-btn{width:100%;display:flex;align-items:center;gap:12px;padding:10px 14px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--fg);min-height:62px;text-align:left;font-family:var(--font);cursor:pointer}
+.dd-btn:hover,.dd-btn[aria-expanded="true"]{border-color:var(--accent)}
+.dd-btn[aria-expanded="true"]{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent)}
+.dd-ic{width:38px;height:38px;flex:none;border-radius:11px;display:grid;place-items:center;background:var(--c,var(--accent));color:#fff}
+.dd-ic svg{width:21px;height:21px}
+.dd-tx{flex:1;min-width:0;display:grid;line-height:1.25}
+.dd-tx b{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dd-tx small{font-size:12px;color:var(--muted)}
+.chev{flex:none;color:var(--muted);transition:transform .2s}
+[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.dd-menu{position:absolute;z-index:20;left:0;right:0;top:calc(100% + 6px);background:var(--surface);border:1px solid var(--line);border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,.18);padding:6px;max-height:min(420px,60vh);overflow:auto;overscroll-behavior:contain}
+.dd-it{display:flex;align-items:center;gap:12px;padding:9px 10px;border-radius:11px;width:100%;border:0;background:none;text-align:left;font-family:var(--font);color:var(--fg);cursor:pointer}
+.dd-it:hover{background:var(--bg)}
+.dd-it.on{background:color-mix(in srgb,var(--c) 10%,var(--surface))}
+.dd-it .dd-ic{width:34px;height:34px;background:color-mix(in srgb,var(--c) 16%,var(--surface));color:var(--c)}
+.dd-it.on .dd-ic{background:var(--c);color:#fff}
+.ck{flex:none;width:22px;height:22px;border-radius:7px;border:2px solid var(--line);display:grid;place-items:center;color:#fff}
+.ck svg{width:14px;height:14px;opacity:0}
+.on .ck{background:var(--c);border-color:var(--c)} .on .ck svg{opacity:1}
+.ck.rd{border-radius:50%}
+.dd-sep{height:1px;background:var(--line);margin:4px 8px}
+/* PROFILE */
+.pro{display:grid;gap:14px}
+.pro .hello{flex-wrap:nowrap}
+.badge{width:54px;height:54px;flex:none;display:grid;place-items:center}
+.badge svg{width:54px;height:54px}
+.pro-n{min-width:0}
+.pro-n b{font-size:17px}
+.rk{display:inline-flex;align-items:center;gap:5px;margin-top:4px;font:700 11px var(--btn-font);letter-spacing:.05em;text-transform:uppercase;padding:3px 9px;border-radius:999px;background:color-mix(in srgb,var(--rc,#7B2FF7) 14%,var(--surface));color:var(--rc,#7B2FF7)}
+.rk em{font-style:normal;opacity:.7}
+.fire{margin-left:auto;display:grid;justify-items:center;line-height:1.05;padding:8px 12px;border-radius:14px;background:color-mix(in srgb,#EA580C 12%,var(--surface));flex:none}
+.fire b{font-size:20px;color:#EA580C;font-variant-numeric:tabular-nums}.fire small{font-size:10px;font-weight:bold;letter-spacing:.06em;color:var(--muted)}
+.xp-row{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin-bottom:6px}
+.xp-row b{color:var(--fg);font-variant-numeric:tabular-nums}
+.xp{height:12px;border-radius:6px;background:var(--chip);overflow:hidden}
+.xp i{display:block;height:100%;width:0;border-radius:6px;background:linear-gradient(90deg,#0B5CFF,#7B2FF7);transition:width .8s ease}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.day{display:grid;justify-items:center;gap:4px;font-size:11px;color:var(--muted)}
+.day span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--chip);font-size:14px}
+.day.on span{background:#FDBA74}
+.day.today span{outline:3px solid color-mix(in srgb,#EA580C 35%,transparent)}
+.day.today.on span{background:#EA580C}
+.bonus{font-size:13px;margin:0;color:var(--fg);background:color-mix(in srgb,#F59E0B 14%,var(--surface));border-radius:10px;padding:8px 12px}
+.lb .rk{font-size:10px;padding:2px 7px}
+/* LEVEL UP */
+.ov{position:fixed;inset:0;background:rgba(10,20,30,.6);display:grid;place-items:center;z-index:50;padding:24px}
+.conf{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.lv{position:relative;background:var(--surface);color:var(--fg);border-radius:24px;padding:28px 22px;text-align:center;display:grid;gap:10px;justify-items:center;max-width:340px;box-shadow:0 20px 50px rgba(0,0,0,.35);animation:pop .45s cubic-bezier(.2,1.4,.4,1) both}
+.lv-k{font:800 13px var(--btn-font);letter-spacing:.14em;color:#7B2FF7}
+.lv .big svg{width:124px;height:124px}
+.lv h3{margin:0;font:800 24px var(--btn-font)}
+.lv p{margin:0;color:var(--muted);font-size:14px}
+@keyframes pop{from{opacity:0;transform:scale(.7)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -220,26 +275,33 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
       <p class="err" id="loginErr" aria-live="polite"></p>
       <button class="btn wide" id="loginBtn" type="submit">Нэвтрэх</button>
     </form>
-    <div class="hello" id="hello" hidden>
-      <span class="avatar" id="avatar"></span>
-      <div><div class="muted" style="font-size:13px">Сайн уу,</div><b id="helloName"></b><span class="cls" id="helloCls"></span></div>
-      <button class="link" id="logout" type="button">Гарах</button>
+    <div class="pro" id="hello" hidden>
+      <div class="hello">
+        <span class="badge" id="pBadge"><span class="avatar" id="avatar"></span></span>
+        <div class="pro-n"><div class="muted" style="font-size:13px">Сайн уу,</div><b id="helloName"></b><span class="cls" id="helloCls"></span><div><span class="rk" id="pTitle" hidden></span></div></div>
+        <div class="fire" id="pFire" hidden><b><span aria-hidden="true">🔥</span> <span id="pStreak">0</span></b><small>ХОНОГ</small></div>
+      </div>
+      <div id="pXpWrap" hidden><div class="xp-row"><span><b id="pXp">0</b> оноо</span><span id="pNext"></span></div><div class="xp"><i id="pBar"></i></div></div>
+      <div class="days" id="pDays" hidden></div>
+      <p class="bonus" id="pBonus" hidden></p>
+      <button class="link" id="logout" type="button" style="justify-self:end;margin:0">Гарах</button>
     </div>
   </section>
 
   <!-- START -->
   <section class="card" id="start">
     <div>
-      <div class="sec-h"><span class="lbl">1 · Сэдэв сонгох</span><span class="best" id="count"></span></div>
-      <div class="topics" id="topics"></div>
+      <div class="sec-h"><span class="lbl">1 · Сэдэв</span><span class="best" id="count"></span></div>
+      <div class="dd" id="ddT">
+        <button class="dd-btn" id="ddTb" type="button" aria-haspopup="listbox" aria-expanded="false"><span class="dd-ic" id="ddTi"></span><span class="dd-tx"><b id="ddTn"></b><small id="ddTs"></small></span><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="dd-menu" id="topics" role="listbox" aria-multiselectable="true" hidden></div>
+      </div>
     </div>
     <div>
       <div class="sec-h"><span class="lbl">2 · Тоглоомын төрөл</span></div>
-      <div class="seg" id="modes">
-        <button class="chip" data-mode="def" aria-pressed="true">Тайлбар → Нэр томьёо</button>
-        <button class="chip" data-mode="edef" aria-pressed="false">Definition → Term</button>
-        <button class="chip" data-mode="mn" aria-pressed="false">Монгол → Англи</button>
-        <button class="chip" data-mode="en" aria-pressed="false">Англи → Монгол</button>
+      <div class="dd" id="ddM">
+        <button class="dd-btn" id="ddMb" type="button" aria-haspopup="listbox" aria-expanded="false"><span class="dd-ic" id="ddMi"></span><span class="dd-tx"><b id="ddMn"></b><small id="ddMs"></small></span><svg class="chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg></button>
+        <div class="dd-menu" id="modes" role="listbox" hidden></div>
       </div>
     </div>
     <div>
@@ -299,6 +361,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
         <div class="rank" id="rRank"></div>
         <p class="muted" id="rLine"></p>
         <p class="place" id="rPlace" hidden></p>
+        <p class="place" id="rBonus" hidden></p>
       </div>
     </div>
     <div id="missWrap">
@@ -331,6 +394,10 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     <div>GeoLingo — IGCSE 0460 · 431 үг · AS 9696 · 354 үг</div>
   </footer>
 </main>
+<div class="ov" id="lvUp" hidden role="dialog" aria-modal="true" aria-labelledby="lvName">
+  <canvas class="conf" id="conf"></canvas>
+  <div class="lv"><div class="lv-k">ШИНЭ ЦОЛ!</div><span class="big" id="lvBadge"></span><h3 id="lvName"></h3><p id="lvText"></p><button class="btn" id="lvOk" type="button">Үргэлжлүүлэх</button></div>
+</div>
 
 <script>
 /* ===== ТОХИРГОО ===== */
@@ -374,6 +441,24 @@ useLevel(LEVEL);
 const COLORS={all:"#7C3AED",a1:"#2F80ED",a2:"#F59E0B",a3:"#DC2626",a4:"#C026D3",a5:"#4F46E5",a6:"#EA580C",t1:"#2F80ED",t2:"#06A3C2",t3:"#16A34A",t4:"#DC2626",t5:"#F59E0B",t6:"#C026D3",t7:"#EA580C",t8:"#E11D48",t9:"#4F46E5",t10:"#65A30D",t11:"#0D9488"};
 
 const $=id=>document.getElementById(id);
+/* ===== ЦОЛ ===== */
+const RANKS=[
+ {n:"Explorer",xp:0,c:["#E0A375","#9C5A2E"],t:"#9C5A2E",g:'<path d="M26 44c-3-5-2-12 2-13s5 6 3 11-4 5-5 2z"/><path d="M38 34c-2-5 0-11 4-11s4 7 2 11-5 4-6 0z"/>'},
+ {n:"Navigator",xp:1000,c:["#E2E8EE","#8C9AA8"],t:"#64748B",g:'<circle cx="32" cy="32" r="13"/><path d="M32 21l4 11-4 11-4-11z" fill="#fff"/><path d="M32 15v3M32 46v3M15 32h3M46 32h3"/>'},
+ {n:"Cartographer",xp:2500,c:["#FCD34D","#C98A0B"],t:"#B45309",g:'<path d="M18 22l9-4 10 4 9-4v24l-9 4-10-4-9 4z"/><path d="M27 18v24M37 22v24"/>'},
+ {n:"Surveyor",xp:5000,c:["#B5F0F0","#3A9BB0"],t:"#0E7490",g:'<rect x="26" y="17" width="12" height="9" rx="2"/><path d="M38 21h4M32 26v5M32 31l-9 17M32 31v17M32 31l9 17"/>'},
+ {n:"Expedition Leader",xp:9000,c:["#93C5FD","#2563EB"],t:"#2563EB",g:'<path d="M14 47l12-18 6 8 6-10 12 20z"/><path d="M38 27V15l8 3-8 3"/>'},
+ {n:"Master Geographer",xp:15000,c:["#D8B4FE","#7B2FF7"],t:"#7B2FF7",g:'<circle cx="32" cy="31" r="13"/><path d="M19 31h26M32 18c4 4 4 22 0 26M32 18c-4 4-4 22 0 26M24 48h16"/>'},
+ {n:"Atlas Legend",xp:25000,c:null,t:"#DB2777",g:'<circle cx="32" cy="35" r="11"/><path d="M21 35h22M32 24c3 3 3 19 0 22M32 24c-3 3-3 19 0 22"/><path d="M23 19l4 4 5-7 5 7 4-4-1 6H24z" fill="#FCD34D" stroke="#FCD34D" stroke-width="2"/>'}];
+const rankIdx=xp=>{let i=0;RANKS.forEach((r,j)=>{if(xp>=r.xp)i=j});return i};
+let _bid=0;
+function badgeSVG(i){const r=RANKS[i],id="bg"+(++_bid);
+  const stops=r.c?`<stop offset="0" stop-color="${r.c[0]}"/><stop offset="1" stop-color="${r.c[1]}"/>`:'<stop offset="0" stop-color="#F472B6"/><stop offset=".35" stop-color="#F59E0B"/><stop offset=".7" stop-color="#22C55E"/><stop offset="1" stop-color="#0B5CFF"/>';
+  return `<svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">${stops}</linearGradient></defs><path d="M32 3l25 9v18c0 16-11 27-25 32C18 57 7 46 7 30V12z" fill="url(#${id})"/><path d="M32 8l20 7v15c0 13-8 22-20 27-12-5-20-14-20-27V15z" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1.5"/><g fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">${r.g}</g></svg>`}
+const fmt=n=>String(n).replace(/\B(?=(\d{3})+(?!\d))/g," ");
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>';
+const MODES={def:["Тайлбар → Нэр томьёо","Монгол тайлбар уншаад англи нэр томьёо сонгоно"],edef:["Definition → Term","Англи тодорхойлолт уншаад нэр томьёо сонгоно"],mn:["Монгол → Англи","Монгол үгийн англи нэрийг олно"],en:["Англи → Монгол","Англи үгийн монгол утгыг олно"]};
+const MODE_IC='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h7"/><path d="M17 15l3 3-3 3"/></svg>';
 let chosen=new Set(KEYS), mode="def", dur=60;
 let pool=[],score=0,streak=0,right=0,total=0,missed=[],left=0,timer=null,cur=null,locked=false;
 
@@ -382,31 +467,46 @@ const bestKey=()=>"best-"+(LEVEL==="as"?"as-":"")+mode+"-"+dur;
 function showBest(){const b=store(bestKey());$("bestLbl").textContent=b?"Дээд оноо: "+b:""}
 
 const tWrap=$("topics");
-function tcard(k,name,n){const b=document.createElement("button");b.className="tcard";b.dataset.k=k;b.style.setProperty("--c",COLORS[k]);
-  b.innerHTML='<span class="ic">'+ICONS[k]+'</span><b></b><small>'+(k==="all"?"":TNUM[k]+" · ")+n+' үг</small>';b.querySelector("b").textContent=name;return b}
-function buildTopics(){tWrap.innerHTML="";
-  tWrap.append(tcard("all",LEVEL==="as"?"All AS topics":"All topics",W.length));
-  KEYS.forEach(k=>tWrap.append(tcard(k,TOPICS[k],W.filter(w=>w.t===k).length)));}
+function ddItem(k,name,sub,on,radio){const b=document.createElement("button");b.type="button";b.className="dd-it"+(on?" on":"");b.dataset.k=k;b.setAttribute("role","option");b.setAttribute("aria-selected",on);
+  b.style.setProperty("--c",COLORS[k]||"#0E7C86");b.innerHTML='<span class="dd-ic">'+(ICONS[k]||MODE_IC)+'</span><span class="dd-tx"><b></b><small></small></span><span class="ck'+(radio?" rd":"")+'">'+CHECK+'</span>';
+  b.querySelector("b").textContent=name;b.querySelector("small").textContent=sub;return b}
+const allName=()=>LEVEL==="as"?"All AS topics":"All topics";
+function buildTopics(){tWrap.innerHTML="";const all=chosen.size===KEYS.length;
+  tWrap.append(ddItem("all",allName(),"Бүх сэдэв · "+W.length+" үг",all));
+  const sep=document.createElement("div");sep.className="dd-sep";tWrap.append(sep);
+  KEYS.forEach(k=>tWrap.append(ddItem(k,TOPICS[k],TNUM[k]+" · "+W.filter(w=>w.t===k).length+" үг",!all&&chosen.has(k))));}
+function syncTopics(){
+  const all=chosen.size===KEYS.length,n=W.filter(w=>chosen.has(w.t)).length,list=KEYS.filter(k=>chosen.has(k));
+  tWrap.querySelectorAll(".dd-it").forEach(b=>{const on=b.dataset.k==="all"?all:(!all&&chosen.has(b.dataset.k));b.classList.toggle("on",on);b.setAttribute("aria-selected",on)});
+  const k=all?"all":list[0];$("ddTi").innerHTML=ICONS[k];$("ddTb").style.setProperty("--c",COLORS[k]);
+  $("ddTn").textContent=all?allName():TOPICS[k];
+  $("ddTs").textContent=all?KEYS.length+" сэдэв · "+n+" үг":(list.length>1?"+"+(list.length-1)+" сэдэв · "+n+" үг":TNUM[k]+" · "+n+" үг");
+  $("count").textContent=n+" үг";$("go").disabled=n<4||(ONLINE&&!me);
+}
 buildTopics();
 function setLevel(l){useLevel(l);try{localStorage.setItem("gl-level",l)}catch(e){}
   chosen=new Set(KEYS);buildTopics();syncTopics();showBest();
   document.querySelectorAll("#lvl button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.l===l));
   if(typeof onLevelChange==="function")onLevelChange();}
 document.querySelectorAll("#lvl button").forEach(b=>{b.setAttribute("aria-pressed",b.dataset.l===LEVEL);b.onclick=()=>{if(b.dataset.l!==LEVEL)setLevel(b.dataset.l)}});
-function syncTopics(){
-  const all=chosen.size===KEYS.length;
-  tWrap.querySelectorAll(".tcard").forEach(b=>b.setAttribute("aria-pressed",b.dataset.k==="all"?all:(!all&&chosen.has(b.dataset.k))));
-  const n=W.filter(w=>chosen.has(w.t)).length;
-  $("count").textContent=n+" үг";$("go").disabled=n<4||(ONLINE&&!me);
-}
-tWrap.addEventListener("click",e=>{const b=e.target.closest(".tcard");if(!b)return;const k=b.dataset.k;
-  if(k==="all")chosen=new Set(KEYS);
+tWrap.addEventListener("click",e=>{const b=e.target.closest(".dd-it");if(!b)return;const k=b.dataset.k;
+  if(k==="all"){chosen=new Set(KEYS);closeDD()}
   else if(chosen.size===KEYS.length)chosen=new Set([k]);
   else{chosen.has(k)?chosen.delete(k):chosen.add(k);if(!chosen.size)chosen=new Set(KEYS)}
   syncTopics()});
+/* dropdown open/close */
+function openDD(id){closeDD();const btn=$(id+"b"),m=btn.nextElementSibling;m.hidden=false;btn.setAttribute("aria-expanded","true")}
+function closeDD(){document.querySelectorAll(".dd-menu").forEach(m=>{m.hidden=true;m.previousElementSibling.setAttribute("aria-expanded","false")})}
+["ddT","ddM"].forEach(id=>$(id+"b").addEventListener("click",e=>{e.stopPropagation();const open=$(id+"b").getAttribute("aria-expanded")==="true";open?closeDD():openDD(id)}));
+document.addEventListener("click",e=>{if(!e.target.closest(".dd"))closeDD()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeDD()});
+/* mode dropdown */
+function buildModes(){const m=$("modes");m.innerHTML="";Object.entries(MODES).forEach(([k,[a,sub]])=>{const b=ddItem(k,a,sub,k===mode,true);b.style.setProperty("--c","#0E7C86");m.append(b)});
+  $("ddMi").innerHTML=MODE_IC;$("ddMn").textContent=MODES[mode][0];$("ddMs").textContent=MODES[mode][1]}
+$("modes").addEventListener("click",e=>{const b=e.target.closest(".dd-it");if(!b)return;mode=b.dataset.k;buildModes();closeDD();showBest()});
+buildModes();
 function single(wrap,attr,set){wrap.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
   wrap.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed",x===b));set(b.dataset[attr]);showBest()})}
-single($("modes"),"mode",v=>mode=v);
 single($("times"),"t",v=>dur=+v);
 syncTopics();showBest();
 
@@ -489,11 +589,46 @@ async function flushPending() {
   for (const d of list) { try { const r = await apiPost(d); if (!r.ok && r.error !== "bad_pin" && r.error !== "unknown") left.push(d); } catch (e) { left.push(d); } }
   pending(left);
 }
+let prof = null;
+const WD = ["Ня","Да","Мя","Лх","Пү","Ба","Бя"];
+function renderProfile() {
+  const p = prof, has = !!(p && p.level === LEVEL);
+  ["pTitle","pFire","pXpWrap","pDays"].forEach(id => $(id).hidden = !has);
+  if (!has) { $("pBonus").hidden = true; $("pBadge").innerHTML = '<span class="avatar">' + (me ? me.name.charAt(0).toUpperCase() : "") + '</span>'; return; }
+  const i = rankIdx(p.xp), R = RANKS[i], N = RANKS[i + 1];
+  $("pBadge").innerHTML = badgeSVG(i);
+  $("pTitle").style.setProperty("--rc", R.t); $("pTitle").innerHTML = "★ "; $("pTitle").append(R.n, Object.assign(document.createElement("em"), { textContent: " · " + (LEVEL === "as" ? "AS" : "IGCSE") }));
+  $("pStreak").textContent = p.streak;
+  $("pXp").textContent = fmt(p.xp);
+  $("pNext").innerHTML = ""; if (N) { $("pNext").append(N.n + " хүртэл "); $("pNext").append(Object.assign(document.createElement("b"), { textContent: fmt(N.xp - p.xp) })); } else $("pNext").textContent = "Дээд цол!";
+  $("pBar").style.width = (N ? Math.min(100, (p.xp - R.xp) / (N.xp - R.xp) * 100) : 100) + "%";
+  $("pDays").innerHTML = (p.week || []).map((d, j) => { const wd = WD[new Date(d.d + "T12:00:00Z").getUTCDay()]; return '<div class="day' + (d.on ? " on" : "") + (j === 6 ? " today" : "") + '"><span>' + (d.on ? "🔥" : "") + '</span>' + wd + '</div>'; }).join("");
+  $("pBonus").hidden = !p.nextBonus;
+  if (p.nextBonus) $("pBonus").textContent = "🎁 Өнөөдрийн эхний тоглоомд +" + p.nextBonus + " бонус оноо" + (p.playedYesterday ? " (" + (p.streak + 1) + " хоног дараалал)" : "");
+}
+async function loadProfile() {
+  if (!ONLINE || !me) return;
+  try { const r = await apiGet({ action: "me", name: me.name, cls: me.cls, pin: me.pin || "", level: LEVEL }); if (r.ok) { prof = r; renderProfile(); } } catch (e) {}
+}
+function showLevelUp(i) {
+  const R = RANKS[i], N = RANKS[i + 1];
+  $("lvBadge").innerHTML = badgeSVG(i); $("lvName").textContent = R.n;
+  $("lvText").textContent = "Та " + fmt(R.xp) + " оноонд хүрч шинэ цолтой боллоо." + (N ? " Дараагийн цол: " + N.n : " Энэ бол хамгийн дээд цол!");
+  $("lvUp").hidden = false; confetti(); $("lvOk").focus();
+}
+$("lvOk").onclick = () => { $("lvUp").hidden = true; };
+function confetti() {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const c = $("conf"), x = c.getContext("2d"), W2 = c.width = innerWidth, H2 = c.height = innerHeight;
+  const cols = ["#0B5CFF","#7B2FF7","#F59E0B","#16A34A","#E11D48","#06B6D4"];
+  const P = Array.from({ length: 140 }, () => ({ x: Math.random() * W2, y: -20 - Math.random() * H2 * .5, vx: (Math.random() - .5) * 3, vy: 2 + Math.random() * 4, r: Math.random() * 6, c: cols[Math.random() * 6 | 0] }));
+  let t = 0; (function f() { x.clearRect(0, 0, W2, H2); P.forEach(p => { p.x += p.vx; p.y += p.vy; p.r += .1; x.save(); x.translate(p.x, p.y); x.rotate(p.r); x.fillStyle = p.c; x.fillRect(-6, -3, 12, 6); x.restore(); }); if (++t < 200 && !$("lvUp").hidden) requestAnimationFrame(f); else x.clearRect(0, 0, W2, H2); })();
+}
 function renderWho() {
   $("login").hidden = !ONLINE;
   if (!ONLINE) return;
   $("loginForm").hidden = !!me; $("hello").hidden = !me;
-  if (me) { $("helloName").textContent = me.name; $("helloCls").textContent = me.cls; $("avatar").textContent = me.name.charAt(0).toUpperCase(); }
+  if (me) { $("helloName").textContent = me.name; $("helloCls").textContent = me.cls; renderProfile(); }
   $("go").disabled = !me || W.filter(w => chosen.has(w.t)).length < 4;
   $("go").firstChild.textContent = me ? "Тоглож эхлэх " : "Эхлээд нэвтэрнэ үү ";
 }
@@ -504,19 +639,19 @@ $("loginForm").addEventListener("submit", async e => {
   $("loginErr").textContent = ""; $("loginBtn").disabled = true; $("loginBtn").textContent = "Шалгаж байна...";
   try {
     const r = await apiGet({ action: "login", name, cls, pin });
-    if (r.ok) { saveMe({ name: r.name, cls: r.cls, pin }); renderWho(); flushPending(); loadBoard(); }
+    if (r.ok) { saveMe({ name: r.name, cls: r.cls, pin }); renderWho(); flushPending(); loadBoard(); loadProfile(); }
     else { if (r.pinRequired) { $("pinWrap").hidden = false; $("fields").classList.add("pin"); } $("loginErr").textContent = ERR[r.error] || "Нэвтэрч чадсангүй."; }
   } catch (err) { $("loginErr").textContent = "Интернэт холболтоо шалгаад дахин оролдоно уу."; }
   $("loginBtn").disabled = false; $("loginBtn").textContent = "Нэвтрэх";
 });
-$("logout").onclick = () => { saveMe(null); renderWho(); loadBoard(); };
+$("logout").onclick = () => { saveMe(null); prof = null; renderWho(); loadBoard(); };
 
 function fillTopicFilter() {
   $("fTopic").innerHTML = "";
   const a = document.createElement("option"); a.value = LEVEL; a.textContent = LEVEL === "as" ? "All AS topics" : "All IGCSE topics"; $("fTopic").append(a);
   KEYS.forEach(k => { const o = document.createElement("option"); o.value = k; o.textContent = TNUM[k] + " · " + TOPICS[k]; $("fTopic").append(o); });
 }
-function onLevelChange() { if (ONLINE) { fillTopicFilter(); loadBoard(); } }
+function onLevelChange() { if (ONLINE) { fillTopicFilter(); loadBoard(); prof = null; renderProfile(); loadProfile(); } }
 let boardSeq = 0;
 async function loadBoard() {
   if (!ONLINE) return;
@@ -538,7 +673,8 @@ async function loadBoard() {
     li.innerHTML = '<span class="pos"></span><span class="nm"><b></b><small></small></span><span class="pts"><span></span><small>ОНОО</small></span>';
     const p = li.querySelector(".pos"); p.textContent = a.pos; if (a.pos <= 3) p.classList.add("g" + a.pos);
     li.querySelector(".nm b").textContent = a.name + (a.me ? " (та)" : "");
-    li.querySelector(".nm small").textContent = a.cls + " · " + a.games + " тоглолт · " + a.acc + "% зөв";
+    li.querySelector(".nm small").textContent = a.cls + (a.streak ? " · 🔥 " + a.streak + " хоног" : "") + " · " + a.acc + "% зөв";
+    if (a.xp !== undefined) { const ri = rankIdx(a.xp), ch = document.createElement("span"); ch.className = "rk"; ch.style.setProperty("--rc", RANKS[ri].t); ch.textContent = "★ " + RANKS[ri].n; li.querySelector(".nm").append(ch); }
     li.querySelector(".pts span").textContent = a.points;
     list.append(li);
   });
@@ -564,17 +700,20 @@ async function submitScore() {
   const acc = total ? Math.round(right / total * 100) : 0;
   const data = { name: me.name, cls: me.cls, pin: me.pin, topics: LEVEL + "," + (chosen.size === KEYS.length ? "all" : [...chosen].join(",")), mode, dur, score, right, total,
     missed: [...new Map(missed.map(m => [m.en, m])).values()].map(m => ({ en: m.en, mn: m.mn, t: m.t })) };
-  const pl = $("rPlace"); pl.hidden = false; pl.textContent = "Оноог хадгалж байна...";
+  const pl = $("rPlace"); pl.hidden = false; pl.textContent = "Оноог хадгалж байна..."; $("rBonus").hidden = true;
   $("toBoard").hidden = false;
   try {
     const r = await apiPost(data);
-    if (r.ok) { $("fTopic").value = LEVEL; const b = await loadBoard(); const rc = b && b.me ? b.meInClass : r.rankClass, ra = b && b.me ? b.me.rank : r.rankAll;
+    if (r.ok) {
+      if (r.profile) { const before = rankIdx(r.prevXp || 0); prof = r.profile; renderProfile(); if (rankIdx(r.profile.xp) > before) setTimeout(() => showLevelUp(rankIdx(r.profile.xp)), 700); }
+      if (r.bonus) { $("rBonus").hidden = false; $("rBonus").textContent = "🎁 Өдрийн бонус +" + r.bonus + " · 🔥 " + (r.profile ? r.profile.streak : "") + " хоног дараалал"; }
+      $("fTopic").value = LEVEL; const b = await loadBoard(); const rc = b && b.me ? b.meInClass : r.rankClass, ra = b && b.me ? b.me.rank : r.rankAll;
       pl.innerHTML = ""; pl.append(LEVEL === "as" ? "AS · " : "IGCSE · ", me.cls + " ангидаа ", Object.assign(document.createElement("em"), { textContent: rc + "-р байр" }), " · нийт ", Object.assign(document.createElement("em"), { textContent: ra + "-р байр" })); }
     else if (r.error === "bad_pin" || r.error === "unknown") { pl.textContent = "Оноо хадгалагдсангүй: нэвтрэх мэдээлэл буруу байна. Дахин нэвтэрнэ үү."; saveMe(null); renderWho(); }
     else { pl.textContent = "Оноо хадгалагдсангүй."; }
   } catch (e) { pending([...pending(), data]); pl.textContent = "Интернэт тасарсан тул оноог дараа нь автоматаар илгээнэ."; }
 }
-if (ONLINE) { fillTopicFilter(); renderWho(); flushPending(); loadBoard(); }
+if (ONLINE) { fillTopicFilter(); renderWho(); flushPending(); loadBoard(); loadProfile(); }
 $("go").onclick=start;$("again").onclick=start;
 $("quit").onclick=()=>{left=0;end()};
 $("menu").onclick=()=>{$("results").hidden=true;$("start").hidden=false;if(ONLINE){$("login").hidden=false;$("board").hidden=false;}};
