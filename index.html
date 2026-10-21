@@ -266,7 +266,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
   <!-- LOGIN -->
   <section class="card" id="login" hidden>
     <form class="who" id="loginForm" hidden>
-      <div class="sec-h" style="margin:0"><span class="lbl">Нэвтрэх</span><span class="best">Оноо, ранкаа хадгалахын тулд</span></div>
+      <div class="sec-h" style="margin:0"><span class="lbl">Нэвтрэх</span><span class="best">Оноогоо хадгалж Leaderboard-д орохын тулд</span></div>
       <div class="fields" id="fields">
         <label class="fld f-name"><span>Нэр</span><input id="inName" autocomplete="name" maxlength="40" placeholder="Жишээ: Тэмүүлэн Бат" required></label>
         <label class="fld"><span>Анги</span><input id="inCls" list="clsList" maxlength="10" placeholder="10А" required><datalist id="clsList"></datalist></label>
@@ -366,12 +366,12 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     <div class="row">
       <button class="btn" id="again">Дахин тоглох</button>
       <button class="btn ghost" id="menu">Сэдэв солих</button>
-      <button class="btn ghost" id="toBoard" hidden>Ранк харах</button>
+      <button class="btn ghost" id="toBoard" hidden>Leaderboard</button>
     </div>
   </section>
   <!-- BOARD -->
   <section class="card" id="board" hidden>
-    <div class="sec-h" style="margin:0"><span class="lbl">Ранк</span><button class="link" id="bRefresh" type="button" style="margin:0">Шинэчлэх</button></div>
+    <div class="sec-h" style="margin:0"><span class="lbl">Leaderboard</span><button class="link" id="bRefresh" type="button" style="margin:0">Шинэчлэх</button></div>
     <div class="filters">
       <label class="fld"><span>Хугацаа</span><select id="fPeriod"><option value="week">Сүүлийн 7 хоног</option><option value="all">Бүх цаг үе</option></select></label>
       <label class="fld"><span>Анги</span><select id="fCls"><option value="all">Бүх анги</option></select></label>
@@ -655,7 +655,7 @@ async function loadBoard() {
   $("bList").innerHTML = '<li style="grid-template-columns:1fr"><span class="muted">Ачаалж байна...</span></li>';
   let r;
   try { r = await apiGet({ action: "board", period: $("fPeriod").value, filterCls: $("fCls").value, topic: $("fTopic").value, name: me ? me.name : "", cls: me ? me.cls : "" }); }
-  catch (e) { if (seq === boardSeq) $("bList").innerHTML = '<p class="empty">Ранкийг ачаалж чадсангүй. Интернэтээ шалгана уу.</p>'; return; }
+  catch (e) { if (seq === boardSeq) $("bList").innerHTML = '<p class="empty">Leaderboard-ийг ачаалж чадсангүй. Интернэтээ шалгана уу.</p>'; return; }
   if (seq !== boardSeq) return;
   const cur = $("fCls").value;
   $("fCls").innerHTML = '<option value="all">Бүх анги</option>'; $("clsList").innerHTML = "";
