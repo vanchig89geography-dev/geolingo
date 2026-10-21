@@ -1,7 +1,7 @@
 {
   "name": "GeoLingo",
   "short_name": "GeoLingo",
-  "description": "IGCSE Geography 0460 нэр томьёог тоглоомоор сур. Powered by Ван багш",
+  "description": "IGCSE 0460 ба AS 9696 газарзүйн нэр томьёог тоглоомоор сур. Powered by Ван багш",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
