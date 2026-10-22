@@ -172,6 +172,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
 @media (max-width:560px){.filters{grid-template-columns:1fr 1fr}.filters .fld:first-child{grid-column:1/-1}}
 .lb{display:grid;gap:8px;margin:0;padding:0;list-style:none}
 .lb li{display:grid;grid-template-columns:36px 1fr auto;gap:12px;align-items:center;padding:10px 12px;border-radius:14px;border:1px solid var(--line);background:var(--bg)}
+.lb li.gap{display:block;text-align:center;border:0;background:none;padding:0;color:var(--muted);font-weight:bold;letter-spacing:.3em}
 .lb li.me{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
 .pos{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font:bold 15px var(--font);background:var(--chip);color:var(--fg);font-variant-numeric:tabular-nums}
 .pos.g1{background:#F5C542;color:#3D2C00}.pos.g2{background:#C9D3DB;color:#25313A}.pos.g3{background:#E0A375;color:#3A1F0B}
@@ -255,7 +256,6 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
 </style>
 </head>
 <body>
-
 
 <section class="hero" aria-hidden="false">
   <div class="hero-in">
@@ -559,8 +559,35 @@ function tone(f, t0, dur, type, vol, f2) {
 const SFX = {
   ok: () => { tone(880, 0, 0.12, "sine", 0.22); tone(1320, 0.09, 0.18, "sine", 0.2); },
   no: () => { tone(220, 0, 0.18, "square", 0.08, 160); tone(150, 0.14, 0.22, "square", 0.07, 110); },
-  up: () => { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.11, 0.22, "triangle", 0.22)); tone(1319, 0.46, 0.5, "triangle", 0.2); tone(1047, 0.46, 0.5, "sine", 0.12); }
+  up: () => { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.11, 0.22, "triangle", 0.22)); tone(1319, 0.46, 0.5, "triangle", 0.2); tone(1047, 0.46, 0.5, "sine", 0.12);
+    applause(0.35, 2.6); woohoo(0.55); }
 };
+/* Алга ташилт: олон богино "шаалт" дуу (шүүсэн шуугиан) */
+let NOISE = null;
+function noiseBuf(a) { if (!NOISE) { const n = a.sampleRate * 0.25, b = a.createBuffer(1, n, a.sampleRate), d = b.getChannelData(0); for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1; NOISE = b; } return NOISE; }
+function clap(a, t, vol) {
+  const s = a.createBufferSource(), f = a.createBiquadFilter(), g = a.createGain();
+  s.buffer = noiseBuf(a); f.type = "bandpass"; f.frequency.value = 1100 + Math.random() * 1600; f.Q.value = 0.9;
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol, t + 0.004); g.gain.exponentialRampToValueAtTime(0.0001, t + 0.06 + Math.random() * 0.05);
+  s.connect(f).connect(g).connect(a.destination); s.start(t, Math.random() * 0.15, 0.13);
+}
+function applause(t0, dur) {
+  const a = ac(); if (!a) return; const start = a.currentTime + t0, n = Math.floor(dur * 55);
+  for (let i = 0; i < n; i++) { const x = i / n, t = start + x * dur + Math.random() * 0.03;
+    const env = Math.min(1, x * 6) * (1 - Math.pow(x, 2.2)); clap(a, t, 0.05 + 0.18 * env * Math.random()); }
+}
+/* "Үү-хүү!" баярын хашгираан: дуу хоолой шиг хоёр гулсалт ая */
+function woohoo(t0) {
+  const a = ac(); if (!a) return;
+  const voice = (st, d, f1, f2) => { const t = a.currentTime + st, o = a.createOscillator(), g = a.createGain(), v = a.createOscillator(), vg = a.createGain();
+    const F = [a.createBiquadFilter(), a.createBiquadFilter()]; F[0].type = F[1].type = "bandpass"; F[0].frequency.value = 450; F[1].frequency.value = 900; F[0].Q.value = F[1].Q.value = 6;
+    o.type = "sawtooth"; o.frequency.setValueAtTime(f1, t); o.frequency.exponentialRampToValueAtTime(f2, t + d * 0.7); o.frequency.exponentialRampToValueAtTime(f2 * 0.8, t + d);
+    v.frequency.value = 6; vg.gain.value = 10; v.connect(vg).connect(o.frequency);
+    g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5, t + 0.05); g.gain.setValueAtTime(0.5, t + d * 0.6); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+    F.forEach(f => { o.connect(f); f.connect(g); }); g.connect(a.destination); o.start(t); v.start(t); o.stop(t + d + 0.05); v.stop(t + d + 0.05); };
+  voice(t0, 0.32, 330, 520);          // "Үү"
+  voice(t0 + 0.36, 0.55, 420, 760);   // "хүү!"
+}
 function play(k) { if (SOUND) try { SFX[k](); } catch (e) {} }
 const ICON_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
 const ICON_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
@@ -725,16 +752,23 @@ async function loadBoard() {
   $("fCls").value = [...$("fCls").options].some(o => o.value === cur) ? cur : "all";
   const list = $("bList"); list.innerHTML = "";
   if (!r.top || !r.top.length) list.innerHTML = '<p class="empty">Энд одоогоор оноо алга. Эхний тоглогч та болоорой!</p>';
-  (r.top || []).forEach(a => {
+  const row = (a, pos) => {
     const li = document.createElement("li"); if (a.me) li.className = "me";
     li.innerHTML = '<span class="pos"></span><span class="nm"><b></b><small></small></span><span class="pts"><span></span><small>ОНОО</small></span>';
-    const p = li.querySelector(".pos"); p.textContent = a.pos; if (a.pos <= 3) p.classList.add("g" + a.pos);
+    const p = li.querySelector(".pos"); p.textContent = pos; if (pos <= 3) p.classList.add("g" + pos);
     li.querySelector(".nm b").textContent = a.name + (a.me ? " (та)" : "");
     li.querySelector(".nm small").textContent = a.cls + (a.streak ? " · 🔥 " + a.streak + " хоног" : "") + " · " + a.acc + "% зөв";
     if (a.xp !== undefined) { const ri = rankIdx(a.xp), ch = document.createElement("span"); ch.className = "rk"; ch.style.setProperty("--rc", RANKS[ri].t); ch.textContent = "★ " + RANKS[ri].n; li.querySelector(".nm").append(ch); }
     li.querySelector(".pts span").textContent = a.points;
-    list.append(li);
-  });
+    return li;
+  };
+  const top10 = (r.top || []).slice(0, 10);
+  top10.forEach(a => list.append(row(a, a.pos)));
+  // Шилдэг 10-д ороогүй бол зөвхөн өөрийн байрыг доор нь харуулна
+  if (r.me && !top10.some(a => a.me)) {
+    const gap = document.createElement("li"); gap.className = "gap"; gap.textContent = "⋯"; list.append(gap);
+    list.append(row(r.me, r.me.pos || r.me.rank));
+  }
   $("bMine").textContent = r.me ? "Таны байр: нийт " + r.players + " сурагчаас " + r.me.rank + "-р байр, " + r.me.cls + " ангидаа " + r.meInClass + "-р байр." : (me ? "Та энэ шүүлтүүрээр одоогоор тоглоогүй байна." : "");
   $("bMine").hidden = !$("bMine").textContent;
   const bars = $("bBars"); bars.innerHTML = "";
@@ -778,6 +812,6 @@ $("menu").onclick=()=>{$("results").hidden=true;$("start").hidden=false;if(ONLIN
 document.addEventListener("keydown",e=>{if($("play").hidden)return;const n=+e.key;if(n>=1&&n<=4){const b=$("opt"+(n-1));if(b)b.click()}});
 </script>
 
-<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});</script>
+<script>if("serviceWorker" in navigator){addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));}</script>
 </body>
 </html>
