@@ -110,6 +110,9 @@ h1 img{width:100%;height:auto;filter:var(--logo-fx)}
 .hstat{display:grid;line-height:1.1}
 .hstat b{font-size:22px;font-variant-numeric:tabular-nums}
 .hstat small{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:bold}
+.snd{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:var(--chip);color:var(--fg);display:grid;place-items:center;cursor:pointer}
+.snd svg{width:20px;height:20px}
+.snd.off{color:var(--muted)}
 .streak{margin-left:auto;display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:var(--chip);font-weight:bold;font-variant-numeric:tabular-nums}
 .streak.hot{background:var(--sand);color:#2B2005}
 .qhead{display:flex;align-items:center;gap:10px}
@@ -330,6 +333,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-4-1-6 1-10z"/></svg>
         <span id="sStreak">0</span>
       </div>
+      <button class="snd" id="sndBtn" type="button" aria-label="Дуу асаах/унтраах" title="Дуу"></button>
     </div>
     <section class="card">
       <div class="qhead"><span class="ic" id="qIcon"></span><span class="qtopic" id="qTopic"></span></div>
@@ -542,11 +546,33 @@ function next(){
     b.innerHTML="<kbd>"+(i+1)+"</kbd><span></span>";b.querySelector("span").textContent=mode==="en"?o.mn:o.en;
     b.onclick=()=>answer(o,b);box.append(b)});
 }
+/* ===== ДУУ (Web Audio, файлгүй) ===== */
+let SOUND = true; try { SOUND = localStorage.getItem("gl-sound") !== "off"; } catch (e) {}
+let AC = null;
+function ac() { if (!AC) { const C = window.AudioContext || window.webkitAudioContext; if (!C) return null; AC = new C(); } if (AC.state === "suspended") AC.resume(); return AC; }
+function tone(f, t0, dur, type, vol, f2) {
+  const a = ac(); if (!a) return; const o = a.createOscillator(), g = a.createGain(), t = a.currentTime + t0;
+  o.type = type || "sine"; o.frequency.setValueAtTime(f, t); if (f2) o.frequency.exponentialRampToValueAtTime(f2, t + dur);
+  g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(vol || 0.2, t + 0.015); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+  o.connect(g).connect(a.destination); o.start(t); o.stop(t + dur + 0.02);
+}
+const SFX = {
+  ok: () => { tone(880, 0, 0.12, "sine", 0.22); tone(1320, 0.09, 0.18, "sine", 0.2); },
+  no: () => { tone(220, 0, 0.18, "square", 0.08, 160); tone(150, 0.14, 0.22, "square", 0.07, 110); },
+  up: () => { [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.11, 0.22, "triangle", 0.22)); tone(1319, 0.46, 0.5, "triangle", 0.2); tone(1047, 0.46, 0.5, "sine", 0.12); }
+};
+function play(k) { if (SOUND) try { SFX[k](); } catch (e) {} }
+const ICON_ON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>';
+const ICON_OFF = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>';
+function renderSnd() { const b = $("sndBtn"); b.innerHTML = SOUND ? ICON_ON : ICON_OFF; b.classList.toggle("off", !SOUND); b.setAttribute("aria-pressed", SOUND); }
+$("sndBtn").onclick = () => { SOUND = !SOUND; try { localStorage.setItem("gl-sound", SOUND ? "on" : "off"); } catch (e) {} renderSnd(); if (SOUND) play("ok"); };
+renderSnd();
+
 function answer(o,b){
   if(locked||left<=0)return;locked=true;total++;
-  if(o===cur){right++;streak++;const pts=streak>=3?20:10;score+=pts;b.classList.add("ok");
+  if(o===cur){right++;streak++;const pts=streak>=3?20:10;score+=pts;b.classList.add("ok");play("ok");
     $("flash").textContent="Зөв! +"+pts+(streak>=3?"  ·  ×2 дараалал":"");$("flash").className="flash ok";hud();setTimeout(next,450)}
-  else{streak=0;b.classList.add("no");missed.push(cur);
+  else{streak=0;b.classList.add("no");play("no");missed.push(cur);
     const ci=[...$("opts").children].find(x=>x.dataset.en===cur.en);if(ci)ci.classList.add("ok");
     $("flash").textContent="Зөв хариулт: "+cur.en+" — "+cur.mn;$("flash").className="flash no";hud();setTimeout(next,1500)}
 }
@@ -607,6 +633,7 @@ async function loadProfile() {
   try { const r = await apiGet({ action: "me", name: me.name, cls: me.cls, pin: me.pin || "", level: LEVEL }); if (r.ok) { prof = r; renderProfile(); } } catch (e) {}
 }
 function showLevelUp(i) {
+  play("up");
   const R = RANKS[i], N = RANKS[i + 1];
   $("lvBadge").innerHTML = badgeSVG(i); $("lvName").textContent = R.n;
   $("lvText").textContent = "Та " + fmt(R.xp) + " оноонд хүрч шинэ цолтой боллоо." + (N ? " Дараагийн цол: " + N.n : " Энэ бол хамгийн дээд цол!");
@@ -744,6 +771,7 @@ async function submitScore() {
   } catch (e) { pending([...pending(), data]); pl.textContent = "Интернэт тасарсан тул оноог дараа нь автоматаар илгээнэ."; }
 }
 if (ONLINE) { fillTopicFilter(); renderWho(); loadRoster(); checkSession().then(() => { flushPending(); loadBoard(); loadProfile(); }); }
+$("go").addEventListener("click",()=>{ if (SOUND) ac(); });
 $("go").onclick=start;$("again").onclick=start;
 $("quit").onclick=()=>{left=0;end()};
 $("menu").onclick=()=>{$("results").hidden=true;$("start").hidden=false;if(ONLINE){$("login").hidden=false;$("board").hidden=false;}};
