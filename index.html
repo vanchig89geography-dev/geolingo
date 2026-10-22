@@ -115,6 +115,36 @@ h1 img{width:100%;height:auto;filter:var(--logo-fx)}
 .snd.off{color:var(--muted)}
 .streak{margin-left:auto;display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:999px;background:var(--chip);font-weight:bold;font-variant-numeric:tabular-nums}
 .streak.hot{background:var(--sand);color:#2B2005}
+.hstat.opp b{color:#E11D48}
+.hstat.opp small{max-width:84px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-transform:none;letter-spacing:0;font-size:12px}
+.tug{height:10px;border-radius:999px;background:#E11D48;overflow:hidden;margin-top:-4px}
+.tug i{display:block;height:100%;width:50%;background:var(--accent);transition:width .6s ease;border-right:2px solid var(--surface)}
+.duel-h{display:flex;align-items:center;gap:10px}
+.duel-h .sw{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#E11D48,#7B2FF7);color:#fff;flex:none}
+.duel-h .sw svg{width:22px;height:22px}
+.duel-h b{font:800 18px var(--btn-font)}
+.duel-h small{display:block;color:var(--muted);font-size:13px}
+#duel{grid-template-columns:minmax(0,1fr)}
+#duel>*{min-width:0}
+.didle{display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
+.didle .row>.btn{flex:1 1 170px}
+.djoin{display:flex;gap:8px;flex:1 1 220px;min-width:0}
+.djoin input{flex:1;min-width:0;min-height:54px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg);color:var(--fg);font:bold 22px var(--btn-font);letter-spacing:.3em;text-align:center;padding:8px}
+.djoin input:focus{outline:none;border-color:var(--accent)}
+.dcode{font:800 52px var(--btn-font);letter-spacing:.18em;color:var(--accent);text-align:center;margin:4px 0}
+.dwait{text-align:center;display:grid;gap:6px;justify-items:center}
+.dots::after{content:"";animation:dots 1.4s steps(4) infinite}
+@keyframes dots{0%{content:""}25%{content:"."}50%{content:".."}75%{content:"..."}}
+.cd{background:var(--surface);color:var(--fg);border-radius:24px;padding:26px 30px;text-align:center;display:grid;gap:8px;min-width:260px;box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.cd .vs{font:bold 15px var(--font);color:var(--muted)}
+.cd .vs b{color:var(--fg)}
+.cd .n{font:800 88px/1 var(--btn-font);color:var(--accent);animation:pop .5s cubic-bezier(.2,1.4,.4,1) both}
+.vsr{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center;text-align:center;margin:6px 0 2px}
+.vsr div{display:grid;gap:2px;padding:10px;border-radius:14px;background:var(--chip)}
+.vsr div.w{background:var(--good-bg);outline:2px solid var(--good)}
+.vsr b{font:800 26px var(--btn-font)}
+.vsr small{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vsr span{font:800 14px var(--btn-font);color:var(--muted)}
 .qhead{display:flex;align-items:center;gap:10px}
 .qhead .ic{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:var(--c,var(--accent));color:#FFFFFF}
 .qhead .ic svg{width:20px;height:20px}
@@ -321,6 +351,26 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     </button>
   </section>
 
+  <!-- DUEL -->
+  <section class="card" id="duel" hidden>
+    <div class="duel-h"><span class="sw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5L21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/></svg></span>
+      <div><b>Тэмцээн</b><small>Найзтайгаа зэрэг 2 минут · Ялагч +50 бонус оноо</small></div></div>
+    <div id="dIdle" class="didle">
+      <p class="muted" style="margin:0;font-size:14px">Дээр сонгосон сэдэв, тоглоомын төрлөөр хоёулаа <b>яг ижил асуултанд</b> зэрэг хариулна. 2 минутад илүү оноо авсан нь ялна.</p>
+      <div class="row">
+        <button class="btn" id="dNew" type="button">Найзаа дуудах</button>
+        <div class="djoin"><input id="dCode" inputmode="numeric" pattern="[0-9]*" maxlength="4" placeholder="КОД" aria-label="Тэмцээний код" autocomplete="off"><button class="btn ghost" id="dJoin" type="button">Нэгдэх</button></div>
+      </div>
+    </div>
+    <div class="dwait" id="dWait" hidden>
+      <span class="muted">Найздаа энэ кодыг хэлээрэй:</span>
+      <div class="dcode" id="dShow">0000</div>
+      <span><b class="dots">Найзыгаа хүлээж байна</b></span>
+      <button class="link" id="dCancel" type="button">Цуцлах</button>
+    </div>
+    <p class="err" id="dErr" aria-live="polite"></p>
+  </section>
+
   <!-- PLAY -->
   <div id="play" hidden style="display:grid;gap:12px">
     <div class="hud">
@@ -329,12 +379,14 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
         <span id="sTime">60</span>
       </div>
       <div class="hstat"><b id="sScore">0</b><small>Оноо</small></div>
+      <div class="hstat opp" id="oppBox" hidden><b id="oScore">0</b><small id="oName">Найз</small></div>
       <div class="streak" id="streakBox" title="Дараалсан зөв хариулт">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1 4 5 6 5 11a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-4-1-6 1-10z"/></svg>
         <span id="sStreak">0</span>
       </div>
       <button class="snd" id="sndBtn" type="button" aria-label="Дуу асаах/унтраах" title="Дуу"></button>
     </div>
+    <div class="tug" id="tug" hidden aria-hidden="true"><i id="tugI"></i></div>
     <section class="card">
       <div class="qhead"><span class="ic" id="qIcon"></span><span class="qtopic" id="qTopic"></span></div>
       <p class="prompt" id="qText"></p>
@@ -364,6 +416,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
         <p class="place" id="rBonus" hidden></p>
       </div>
     </div>
+    <div class="vsr" id="vsr" hidden><div id="vsMe"><b>0</b><small>Та</small></div><span>VS</span><div id="vsOp"><b>0</b><small></small></div></div>
     <div id="missWrap">
       <div class="sec-h"><span class="lbl">Давтах үгс</span></div>
       <div class="misses" id="miss"></div>
@@ -371,6 +424,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     <div class="row">
       <button class="btn" id="again">Дахин тоглох</button>
       <button class="btn ghost" id="menu">Сэдэв солих</button>
+      <button class="btn" id="dAgain" type="button" hidden>Дахин тэмцэх</button>
       <button class="btn ghost" id="toBoard" hidden>Leaderboard</button>
     </div>
   </section>
@@ -394,6 +448,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     <div>GeoLingo — IGCSE 0460 · 431 үг · AS 9696 · 354 үг</div>
   </footer>
 </main>
+<div class="ov" id="cdOv" hidden role="dialog" aria-modal="true" aria-label="Тэмцээн эхэлж байна"><div class="cd"><div class="vs" id="cdVs"></div><div class="n" id="cdN">3</div><div class="muted" style="font-size:13px">Бэлдээрэй!</div></div></div>
 <div class="ov" id="lvUp" hidden role="dialog" aria-modal="true" aria-labelledby="lvName">
   <canvas class="conf" id="conf"></canvas>
   <div class="lv"><div class="lv-k">ШИНЭ ЦОЛ!</div><span class="big" id="lvBadge"></span><h3 id="lvName"></h3><p id="lvText"></p><button class="btn" id="lvOk" type="button">Үргэлжлүүлэх</button></div>
@@ -510,31 +565,39 @@ function single(wrap,attr,set){wrap.addEventListener("click",e=>{const b=e.targe
 single($("times"),"t",v=>dur=+v);
 syncTopics();showBest();
 
-const shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const shuffle=(a,rnd=Math.random)=>{for(let i=a.length-1;i>0;i--){const j=rnd()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+/* Тэмцээнд хоёр тоглогч ижил асуулт авахын тулд seed-тэй санамсаргүй тоо */
+const rngOf=s=>()=>{s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+let DUEL=null,qi=0,poolRnd=Math.random;
 const C=163.4;
 
 function start(){
-  pool=shuffle(W.filter(w=>chosen.has(w.t)));score=streak=right=total=0;missed=[];left=dur;
-  $("start").hidden=true;$("results").hidden=true;$("play").hidden=false;document.querySelectorAll("#lvl button").forEach(b=>b.disabled=true);$("login").hidden=true;$("board").hidden=true;
+  qi=0;poolRnd=DUEL?rngOf(DUEL.seed):Math.random;
+  pool=shuffle(W.filter(w=>chosen.has(w.t)),poolRnd);score=streak=right=total=0;missed=[];left=dur;
+  $("oppBox").hidden=$("tug").hidden=!DUEL;$("quit").textContent=DUEL?"Бууж өгөх":"Тоглоомыг дуусгах";
+  if(DUEL){left=duelLeft();$("oName").textContent=DUEL.opp?DUEL.opp.name:"Найз";$("oScore").textContent=0;$("tugI").style.width="50%";}
+  $("start").hidden=true;$("duel").hidden=true;$("vsr").hidden=true;$("dAgain").hidden=true;$("results").hidden=true;$("play").hidden=false;document.querySelectorAll("#lvl button").forEach(b=>b.disabled=true);$("login").hidden=true;$("board").hidden=true;
   window.scrollTo({top:$("play").offsetTop-20,behavior:"smooth"});
   hud();next();clearInterval(timer);
-  timer=setInterval(()=>{left--;hud();if(left<=0)end()},1000);
+  if(DUEL){timer=setInterval(()=>{const l=duelLeft();if(l!==left){left=l;hud()}if(left<=0)end()},250);duelLoop();}
+  else timer=setInterval(()=>{left--;hud();if(left<=0)end()},1000);
 }
 function hud(){
   $("sTime").textContent=Math.max(0,left);$("sScore").textContent=score;$("sStreak").textContent=streak;
-  $("ringPr").style.strokeDashoffset=C*(1-Math.max(0,left)/dur);
+  $("ringPr").style.strokeDashoffset=C*(1-Math.max(0,left)/(DUEL?DUEL_SEC:dur));
   $("ring").classList.toggle("low",left<=10);$("streakBox").classList.toggle("hot",streak>=3);
 }
 function next(){
-  if(!pool.length)pool=shuffle(W.filter(w=>chosen.has(w.t)));
+  if(!pool.length)pool=shuffle(W.filter(w=>chosen.has(w.t)),poolRnd);
+  const rnd=DUEL?rngOf(DUEL.seed+(++qi)*7919):Math.random;
   cur=pool.pop();locked=false;$("flash").textContent="";$("flash").className="flash";
   const lab=w=>(mode==="en"?w.mn:w.en).toLowerCase(), seen=new Set([lab(cur)]);
   const ok=w=>w!==cur&&w.en.toLowerCase()!==cur.en.toLowerCase()&&!seen.has(lab(w));
   const others=[];
-  for(const w of [...shuffle(W.filter(w=>w.t===cur.t)).slice(0,12),...shuffle(W.filter(w=>w.t!==cur.t)).slice(0,12)]){
+  for(const w of [...shuffle(W.filter(w=>w.t===cur.t),rnd).slice(0,12),...shuffle(W.filter(w=>w.t!==cur.t),rnd).slice(0,12)]){
     if(others.length<3&&ok(w)){others.push(w);seen.add(lab(w))}
   }
-  const opts=shuffle([cur,...others]);
+  const opts=shuffle([cur,...others],rnd);
   $("qIcon").innerHTML=ICONS[cur.t];$("qIcon").style.setProperty("--c",COLORS[cur.t]);$("qTopic").textContent=TOPICS[cur.t];
   if(mode==="def"){$("qText").textContent=cur.def;$("qSub").textContent=""}
   else if(mode==="edef"){$("qText").textContent=cur.edef;$("qSub").textContent="Choose the correct term"}
@@ -609,14 +672,14 @@ function end(){
   const acc=total?Math.round(right/total*100):0;
   $("rRank").textContent=acc>=90&&total>=8?"Мэргэшсэн газарзүйч":acc>=70?"Туршлагатай аялагч":acc>=40?"Судлаач":"Эхлэгч";
   const prev=+(store(bestKey())||0);let rec="";
-  if(score>prev&&score>0){store(bestKey(),score);rec=" Шинэ дээд оноо!"}
+  if(score>prev&&score>0&&!DUEL){store(bestKey(),score);rec=" Шинэ дээд оноо!"}
   $("rLine").textContent=total+" асуултаас "+right+" зөв ("+acc+"%)."+rec;
   const uniq=[...new Map(missed.map(m=>[m.en,m])).values()];
   $("missWrap").hidden=!uniq.length;$("miss").innerHTML="";
   uniq.forEach(m=>{const d=document.createElement("div");d.className="miss";
     d.innerHTML="<b></b><span class='mn'></span><p class='ed'></p><p></p>";
     d.querySelector("b").textContent=m.en;d.querySelector(".mn").textContent=m.mn;d.querySelector(".ed").textContent=m.edef;d.querySelector("p:last-child").textContent=m.def;$("miss").append(d)});
-  showBest();submitScore();window.scrollTo({top:$("results").offsetTop-20,behavior:"smooth"});
+  if(DUEL)duelEnd();else{showBest();submitScore();}window.scrollTo({top:$("results").offsetTop-20,behavior:"smooth"});
 }
 
 /* ===== ОНОО, РАНК (Google Sheet) ===== */
@@ -681,6 +744,7 @@ function renderWho() {
   if (me) { $("helloName").textContent = me.name; $("helloCls").textContent = me.cls; renderProfile(); }
   $("go").disabled = !me || W.filter(w => chosen.has(w.t)).length < 4;
   $("go").firstChild.textContent = me ? "Тоглож эхлэх " : "Эхлээд нэвтэрнэ үү ";
+  if (typeof showDuelCard === "function") showDuelCard();
 }
 const ERR = { need_new_pin: "Анх удаа нэвтэрч байна. Өөрийн 4 оронтой PIN (жишээ: 2580) зохиож бичээд дахин Нэвтрэх дарна уу.", cls: "Ангиа жагсаалтаас сонгоно уу.", missing: "Нэр, ангиа бөглөнө үү.", unknown: "Энэ нэр, анги жагсаалтад алга. Багшдаа хандана уу.", bad_pin: "PIN буруу байна. Мартсан бол багшдаа хандаж PIN-ээ шинэчлүүлээрэй.", too_long: "Нэр эсвэл анги хэт урт байна." };
 $("loginForm").addEventListener("submit", async e => {
@@ -804,11 +868,125 @@ async function submitScore() {
     else { pl.textContent = "Оноо хадгалагдсангүй."; }
   } catch (e) { pending([...pending(), data]); pl.textContent = "Интернэт тасарсан тул оноог дараа нь автоматаар илгээнэ."; }
 }
+
+/* ===== ТЭМЦЭЭН (найзтайгаа зэрэг 2 минут) ===== */
+const DUEL_SEC = 120;
+let dLoop = null, dBusy = false, dRtt = 1e9, dSaved = null;
+const DERR = { no_room: "Ийм кодтой тэмцээн олдсонгүй. Кодоо шалгаарай.", full: "Энэ тэмцээнд 2 хүн аль хэдийн орсон байна.", self: "Энэ таны өөрийн код. Найздаа хэлээрэй." };
+const srvNow = () => Date.now() + (DUEL ? DUEL.off : 0);
+const duelLeft = () => Math.max(0, Math.ceil((DUEL.start + DUEL_SEC * 1000 - srvNow()) / 1000));
+function showDuelCard() { $("duel").hidden = !(ONLINE && me && !$("start").hidden); }
+async function dApi(p) {
+  const t0 = Date.now(), r = await apiGet(Object.assign({ code: DUEL ? DUEL.code : "", tok: DUEL ? DUEL.tok : "" }, p)), t1 = Date.now();
+  if (r && r.ok && r.now) {
+    if (!DUEL || DUEL.code !== r.code) { DUEL = { code: r.code, tok: r.tok, off: 0 }; dRtt = 1e9; }
+    if (t1 - t0 < dRtt) { dRtt = t1 - t0; DUEL.off = r.now - (t0 + t1) / 2; }
+    Object.assign(DUEL, { seed: r.seed, start: r.start, me: r.me, level: r.level, topics: r.topics, mode: r.mode, opp: r.opp, you: r.you, result: r.result });
+  }
+  return r;
+}
+function duelUi(st) { $("dIdle").hidden = st !== "idle"; $("dWait").hidden = st !== "wait"; $("dNew").disabled = $("dJoin").disabled = st === "busy"; }
+function duelStop() { clearTimeout(dLoop); dLoop = null; }
+async function duelNew() {
+  if (!me) return; duelStop(); DUEL = null; $("dErr").textContent = ""; duelUi("busy");
+  const topics = chosen.size === KEYS.length ? "all" : [...chosen].join(",");
+  try {
+    const r = await dApi({ action: "duel_new", name: me.name, cls: me.cls, pin: me.pin || "", level: LEVEL, topics, mode });
+    if (!r.ok) { duelUi("idle"); $("dErr").textContent = DERR[r.error] || ERR[r.error] || "Тэмцээн үүсгэж чадсангүй."; return; }
+    $("dShow").textContent = r.code; duelUi("wait");
+    const wait = async () => {
+      if (!DUEL) return;
+      try { const q = await dApi({ action: "duel_poll" }); if (q.ok && q.start && DUEL.opp) { duelCountdown(); return; } if (!q.ok) { duelUi("idle"); $("dErr").textContent = DERR[q.error] || ""; DUEL = null; return; } } catch (e) {}
+      dLoop = setTimeout(wait, 1500);
+    };
+    wait();
+  } catch (e) { duelUi("idle"); $("dErr").textContent = "Интернэт холболтоо шалгана уу."; }
+}
+async function duelJoin() {
+  const code = $("dCode").value.replace(/\D/g, "");
+  if (code.length !== 4) { $("dErr").textContent = "Найзынхаа 4 оронтой кодыг бичнэ үү."; $("dCode").focus(); return; }
+  if (!me) return; duelStop(); DUEL = null; $("dErr").textContent = ""; duelUi("busy");
+  try {
+    const r = await dApi({ action: "duel_join", code, name: me.name, cls: me.cls, pin: me.pin || "" });
+    if (!r.ok) { DUEL = null; duelUi("idle"); $("dErr").textContent = DERR[r.error] || ERR[r.error] || "Нэгдэж чадсангүй."; return; }
+    duelUi("idle"); $("dCode").value = ""; duelCountdown();
+  } catch (e) { DUEL = null; duelUi("idle"); $("dErr").textContent = "Интернэт холболтоо шалгана уу."; }
+}
+function duelCountdown() {
+  duelStop(); duelUi("idle");
+  // Найзын сонгосон түвшин, сэдэв, төрлийг авна (дараа нь буцааж сэргээнэ)
+  dSaved = { level: LEVEL, chosen: new Set(chosen), mode };
+  if (DUEL.level !== LEVEL) setLevel(DUEL.level);
+  chosen = DUEL.topics === "all" ? new Set(KEYS) : new Set(DUEL.topics.split(",").filter(k => KEYS.includes(k)));
+  if (!chosen.size) chosen = new Set(KEYS);
+  mode = MODES[DUEL.mode] ? DUEL.mode : "def"; syncTopics(); buildModes();
+  $("cdVs").innerHTML = ""; $("cdVs").append(Object.assign(document.createElement("b"), { textContent: shortNm(me.name) }), " vs ", Object.assign(document.createElement("b"), { textContent: DUEL.opp ? DUEL.opp.name : "Найз" }));
+  $("cdOv").hidden = false; if (SOUND) ac();
+  let last = null;
+  const tick = () => {
+    const ms = DUEL.start - srvNow(), n = Math.ceil(ms / 1000);
+    if (ms <= 0) { $("cdOv").hidden = true; if (SOUND) try { tone(990, 0, 0.3, "triangle", 0.22); } catch (e) {} start(); return; }
+    if (n !== last) { last = n; const el = $("cdN"); el.textContent = Math.min(n, 5); el.style.animation = "none"; void el.offsetWidth; el.style.animation = ""; if (SOUND && n <= 3) try { tone(660, 0, 0.12, "sine", 0.18); } catch (e) {} }
+    dLoop = setTimeout(tick, 100);
+  };
+  tick();
+}
+const shortNm = n => { const p = String(n).trim().split(/\s+/); return p.length > 1 ? p[0] + " " + p[1].charAt(0) + "." : p[0]; };
+function duelShowOpp() {
+  if (!DUEL || !DUEL.opp) return;
+  $("oScore").textContent = DUEL.opp.score; $("oName").textContent = DUEL.opp.name;
+  const a = score, b = DUEL.opp.score; $("tugI").style.width = (a + b ? Math.max(6, Math.min(94, a / (a + b) * 100)) : 50) + "%";
+}
+function duelLoop() {
+  duelStop();
+  const go = async () => {
+    if (!DUEL || $("play").hidden) return;
+    if (!dBusy) { dBusy = true; try { await dApi({ action: "duel_poll", score, right, total }); duelShowOpp(); } catch (e) {} dBusy = false; }
+    dLoop = setTimeout(go, 2000);
+  };
+  go();
+}
+async function duelEnd() {
+  duelStop(); $("rRank").textContent = "Өрсөлдөгчөө хүлээж байна..."; $("rRank").classList.add("dots");
+  $("rPlace").hidden = true; $("rBonus").hidden = true; $("toBoard").hidden = true; $("vsr").hidden = true; $("again").textContent = "Ганцаараа тоглох";
+  const finish = async () => {
+    let r = null;
+    try { r = await dApi({ action: "duel_poll", score, right, total, done: 1 }); } catch (e) {}
+    if (r && r.ok && r.result) return duelResult(r);
+    if (r && !r.ok) { $("rRank").classList.remove("dots"); $("rRank").textContent = "Тэмцээн дууссан."; return duelReset(); }
+    dLoop = setTimeout(finish, 2000);
+  };
+  finish();
+}
+function duelResult(r) {
+  const res = r.result, i = r.me, mine = res.players[i], w = res.winner;
+  $("rRank").classList.remove("dots");
+  $("rRank").textContent = w === i ? "🏆 Та яллаа!" : w === 2 ? "🤝 Тэнцлээ!" : "Энэ удаад ялагдлаа. Дахин сорь!";
+  $("vsr").hidden = false;
+  const fill = (el, x, nm, win) => { el.className = win ? "w" : ""; el.querySelector("b").textContent = x ? x.score : 0; el.querySelector("small").textContent = nm; };
+  fill($("vsMe"), r.you, "Та", w === i); fill($("vsOp"), r.opp, r.opp ? r.opp.name : "Найз", w === 1 - i);
+  const parts = []; if (mine.win) parts.push((w === 2 ? "🤝 Тэнцсэн бонус +" : "🏆 Ялалтын бонус +") + mine.win); if (mine.daily) parts.push("🎁 Өдрийн бонус +" + mine.daily);
+  $("rBonus").hidden = !parts.length; $("rBonus").textContent = parts.join(" · ");
+  if (w === i) play("up");
+  $("dAgain").hidden = false; $("toBoard").hidden = false;
+  const before = rankIdx(mine.prevXp || 0), after = rankIdx(mine.xp || 0);
+  if (after > before) setTimeout(() => showLevelUp(after), 1800);
+  duelReset(); loadBoard(); loadProfile();
+}
+function duelReset() {
+  duelStop(); DUEL = null;
+  if (dSaved) { if (dSaved.level !== LEVEL) setLevel(dSaved.level); chosen = dSaved.chosen; mode = dSaved.mode; syncTopics(); buildModes(); showBest(); dSaved = null; }
+}
+$("dNew").onclick = duelNew; $("dJoin").onclick = duelJoin;
+$("dCode").addEventListener("keydown", e => { if (e.key === "Enter") duelJoin(); });
+$("dCode").addEventListener("input", () => { $("dCode").value = $("dCode").value.replace(/\D/g, "").slice(0, 4); });
+$("dCancel").onclick = () => { if (DUEL) apiGet({ action: "duel_leave", code: DUEL.code, tok: DUEL.tok }).catch(() => {}); duelStop(); DUEL = null; duelUi("idle"); };
+$("dAgain").onclick = () => { $("results").hidden = true; $("start").hidden = false; $("login").hidden = false; showDuelCard(); $("again").textContent = "Дахин тоглох"; duelNew(); window.scrollTo({ top: $("duel").offsetTop - 20, behavior: "smooth" }); };
 if (ONLINE) { fillTopicFilter(); renderWho(); loadRoster(); checkSession().then(() => { flushPending(); loadBoard(); loadProfile(); }); }
 $("go").addEventListener("click",()=>{ if (SOUND) ac(); });
-$("go").onclick=start;$("again").onclick=start;
+$("go").onclick=start;$("again").onclick=()=>{$("again").textContent="Дахин тоглох";start()};
 $("quit").onclick=()=>{left=0;end()};
-$("menu").onclick=()=>{$("results").hidden=true;$("start").hidden=false;if(ONLINE){$("login").hidden=false;$("board").hidden=false;}};
+$("menu").onclick=()=>{$("results").hidden=true;$("start").hidden=false;$("again").textContent="Дахин тоглох";$("dAgain").hidden=true;$("vsr").hidden=true;if(ONLINE){$("login").hidden=false;$("board").hidden=false;showDuelCard();}};
 document.addEventListener("keydown",e=>{if($("play").hidden)return;const n=+e.key;if(n>=1&&n<=4){const b=$("opt"+(n-1));if(b)b.click()}});
 </script>
 
