@@ -152,8 +152,8 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
 
 /* LOGIN + BOARD */
 .who{display:grid;gap:14px}
-.fields{display:grid;grid-template-columns:2fr 1fr;gap:10px}
-.fields.pin{grid-template-columns:2fr 1fr 1fr}
+.fields{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.fields.pin{grid-template-columns:1fr 2fr 1fr}
 @media (max-width:560px){.fields,.fields.pin{grid-template-columns:1fr 1fr}.fields .f-name{grid-column:1/-1}}
 .fld{display:grid;gap:6px;min-width:0}
 .fld span{font:bold 12px var(--font);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -268,8 +268,8 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     <form class="who" id="loginForm" hidden>
       <div class="sec-h" style="margin:0"><span class="lbl">Нэвтрэх</span><span class="best">Оноогоо хадгалж Leaderboard-д орохын тулд</span></div>
       <div class="fields" id="fields">
-        <label class="fld f-name"><span>Нэр</span><input id="inName" autocomplete="name" maxlength="40" placeholder="Жишээ: Тэмүүлэн Бат" required></label>
-        <label class="fld"><span>Анги</span><input id="inCls" list="clsList" maxlength="10" placeholder="10А" required><datalist id="clsList"></datalist></label>
+        <label class="fld"><span>Анги</span><select id="inCls" required><option value="">Сонгох</option></select><datalist id="clsList"></datalist></label>
+        <label class="fld f-name"><span>Нэр</span><select id="inName" required disabled><option value="">Эхлээд ангиа сонго</option></select></label>
         <label class="fld" id="pinWrap" hidden><span>PIN</span><input id="inPin" inputmode="numeric" maxlength="8" placeholder="••••"></label>
       </div>
       <p class="err" id="loginErr" aria-live="polite"></p>
@@ -627,10 +627,11 @@ function renderWho() {
   $("go").disabled = !me || W.filter(w => chosen.has(w.t)).length < 4;
   $("go").firstChild.textContent = me ? "Тоглож эхлэх " : "Эхлээд нэвтэрнэ үү ";
 }
-const ERR = { missing: "Нэр, ангиа бөглөнө үү.", unknown: "Энэ нэр, анги жагсаалтад алга. Багшдаа хандана уу.", bad_pin: "PIN код буруу байна.", too_long: "Нэр эсвэл анги хэт урт байна." };
+const ERR = { cls: "Ангиа жагсаалтаас сонгоно уу.", missing: "Нэр, ангиа бөглөнө үү.", unknown: "Энэ нэр, анги жагсаалтад алга. Багшдаа хандана уу.", bad_pin: "PIN код буруу байна.", too_long: "Нэр эсвэл анги хэт урт байна." };
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
-  const name = $("inName").value.trim(), cls = $("inCls").value.trim().toUpperCase(), pin = $("inPin").value.trim();
+  const name = $("inName").value.trim(), cls = $("inCls").value.trim(), pin = $("inPin").value.trim();
+  if (!cls || !name) { $("loginErr").textContent = "Анги, нэрээ сонгоно уу."; return; }
   $("loginErr").textContent = ""; $("loginBtn").disabled = true; $("loginBtn").textContent = "Шалгаж байна...";
   try {
     const r = await apiGet({ action: "login", name, cls, pin });
@@ -639,6 +640,38 @@ $("loginForm").addEventListener("submit", async e => {
   } catch (err) { $("loginErr").textContent = "Интернэт холболтоо шалгаад дахин оролдоно уу."; }
   $("loginBtn").disabled = false; $("loginBtn").textContent = "Нэвтрэх";
 });
+let ROST = {}, CLS = [];
+const nameInput = () => '<input id="inName" maxlength="40" placeholder="Нэр Овгийн эхний үсэг (жишээ: Тэмүүлэн Б.)" required>';
+async function loadRoster() {
+  try { const r = await apiGet({ action: "roster" }); ROST = (r && r.classes) || {}; CLS = (r && r.list) || []; } catch (e) { ROST = {}; CLS = []; }
+  if (!CLS.length) { // сервер шинэчлэгдээгүй бол гараар бичнэ
+    $("inCls").outerHTML = '<input id="inCls" maxlength="10" placeholder="10А" required>';
+    $("inName").outerHTML = nameInput();
+    return;
+  }
+  const sel = $("inCls"); sel.innerHTML = '<option value="">Сонгох</option>';
+  CLS.forEach(c => { const o = document.createElement("option"); o.value = c; o.textContent = c; sel.append(o); });
+}
+$("inCls").addEventListener("change", () => {
+  const c = $("inCls").value, list = ROST[c] || [];
+  $("loginErr").textContent = "";
+  if (c && !list.length) { // жагсаалтгүй анги: нэрээ бичнэ
+    if ($("inName").tagName !== "INPUT") $("inName").outerHTML = nameInput();
+    return;
+  }
+  if ($("inName").tagName !== "SELECT") $("inName").outerHTML = '<select id="inName" required></select>';
+  const n = $("inName");
+  n.innerHTML = '<option value="">' + (list.length ? "Нэрээ сонго" : "Эхлээд ангиа сонго") + '</option>';
+  list.forEach(x => { const o = document.createElement("option"); o.value = x; o.textContent = x; n.append(o); });
+  n.disabled = !list.length;
+});
+async function checkSession() {
+  if (!me) return;
+  try { const r = await apiGet({ action: "login", name: me.name, cls: me.cls, pin: me.pin || "" });
+    if (r && r.ok === false && (r.error === "unknown" || r.error === "bad_pin" || r.error === "cls")) { saveMe(null); prof = null; renderWho(); }
+    else if (r && r.ok && (r.name !== me.name || r.cls !== me.cls)) { saveMe({ name: r.name, cls: r.cls, pin: me.pin }); renderWho(); }
+  } catch (e) {}
+}
 $("logout").onclick = () => { saveMe(null); prof = null; renderWho(); loadBoard(); };
 
 function fillTopicFilter() {
@@ -708,7 +741,7 @@ async function submitScore() {
     else { pl.textContent = "Оноо хадгалагдсангүй."; }
   } catch (e) { pending([...pending(), data]); pl.textContent = "Интернэт тасарсан тул оноог дараа нь автоматаар илгээнэ."; }
 }
-if (ONLINE) { fillTopicFilter(); renderWho(); flushPending(); loadBoard(); loadProfile(); }
+if (ONLINE) { fillTopicFilter(); renderWho(); loadRoster(); checkSession().then(() => { flushPending(); loadBoard(); loadProfile(); }); }
 $("go").onclick=start;$("again").onclick=start;
 $("quit").onclick=()=>{left=0;end()};
 $("menu").onclick=()=>{$("results").hidden=true;$("start").hidden=false;if(ONLINE){$("login").hidden=false;$("board").hidden=false;}};
