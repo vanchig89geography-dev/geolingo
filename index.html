@@ -125,6 +125,25 @@ h1 img{width:100%;height:auto;filter:var(--logo-fx)}
 .duel-h b{font:800 18px var(--btn-font)}
 .duel-h small{display:block;color:var(--muted);font-size:13px}
 #duel{grid-template-columns:minmax(0,1fr)}
+/* Табууд: доод цэс (утас) */
+body.tabbed .wrap{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+body.tabbed[data-tab="play"] [data-pane]:not([data-pane~="play"]),body.tabbed[data-tab="duel"] [data-pane]:not([data-pane~="duel"]),
+body.tabbed[data-tab="rank"] [data-pane]:not([data-pane~="rank"]),body.tabbed[data-tab="me"] [data-pane]:not([data-pane~="me"]){display:none!important}
+.tabs{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));z-index:20;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
+  width:min(520px,calc(100% - 24px));padding:6px;border-radius:22px;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--line);box-shadow:0 10px 30px rgba(16,36,43,.18)}
+.tabs button{border:0;background:none;color:var(--muted);display:grid;justify-items:center;gap:2px;padding:8px 4px;border-radius:16px;cursor:pointer;font:700 12px var(--btn-font);position:relative}
+.tabs svg{width:24px;height:24px}
+.tabs button[aria-pressed="true"]{color:var(--accent);background:var(--chip)}
+.tabs button[data-tab="duel"][aria-pressed="true"]{color:#E11D48}
+.tabs .dot{position:absolute;top:6px;right:calc(50% - 18px);width:9px;height:9px;border-radius:50%;background:#E11D48;border:2px solid var(--surface)}
+body.ingame .tabs{display:none}
+.mini{display:flex;align-items:center;gap:10px;width:100%;border:0;background:var(--chip);border-radius:16px;padding:8px 12px;cursor:pointer;color:var(--fg);text-align:left;font:inherit}
+.mini .mb{width:40px;height:40px;flex:none;display:grid;place-items:center}.mini .mb svg{width:40px;height:40px}
+.mini .mt{display:grid;flex:1;min-width:0;line-height:1.25}.mini .mt b{font-size:15px}.mini .mt small{font-size:12px;color:var(--muted);font-weight:bold}
+.mini .mf{font:800 16px var(--btn-font);white-space:nowrap}
+#miniBonus{margin:0}
+body:not(.tabbed) .mini,body:not(.tabbed) #miniBonus{display:none!important}
 #duel>*{min-width:0}
 .didle{display:grid;gap:10px;grid-template-columns:minmax(0,1fr)}
 .didle .row>.btn{flex:1 1 170px}
@@ -295,9 +314,9 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
   </div>
 </section>
 
-<main class="wrap">
+<main class="wrap" id="main">
   <!-- LOGIN -->
-  <section class="card" id="login" hidden>
+  <section class="card" id="login" data-pane="me" hidden>
     <form class="who" id="loginForm" hidden>
       <div class="sec-h" style="margin:0"><span class="lbl">Нэвтрэх</span><span class="best">Оноогоо хадгалж Leaderboard-д орохын тулд</span></div>
       <div class="fields pin" id="fields">
@@ -323,7 +342,9 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
   </section>
 
   <!-- START -->
-  <section class="card" id="start">
+  <section class="card" id="start" data-pane="play">
+    <button class="mini" id="mini" type="button" hidden title="Profile"><span class="mb" id="miniB"></span><span class="mt"><b id="miniN"></b><small id="miniR"></small></span><span class="mf" id="miniF"></span></button>
+    <p class="bonus" id="miniBonus" hidden></p>
     <div>
       <div class="sec-h"><span class="lbl">1 · Сэдэв</span><span class="best" id="count"></span></div>
       <div class="dd" id="ddT">
@@ -352,7 +373,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
   </section>
 
   <!-- DUEL -->
-  <section class="card" id="duel" hidden>
+  <section class="card" id="duel" data-pane="duel" hidden>
     <div class="duel-h"><span class="sw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5L21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/></svg></span>
       <div><b>Тэмцээн</b><small>Найзтайгаа зэрэг 2 минут · Ялагч +50 бонус оноо</small></div></div>
     <div id="dIdle" class="didle">
@@ -372,7 +393,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
   </section>
 
   <!-- PLAY -->
-  <div id="play" hidden style="display:grid;gap:12px">
+  <div id="play" data-pane="play" hidden style="display:grid;gap:12px">
     <div class="hud">
       <div class="ring" id="ring">
         <svg viewBox="0 0 60 60"><circle class="tr" cx="30" cy="30" r="26"/><circle class="pr" id="ringPr" cx="30" cy="30" r="26" stroke-dasharray="163.4" stroke-dashoffset="0"/></svg>
@@ -398,7 +419,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
   </div>
 
   <!-- RESULTS -->
-  <section class="card" id="results" hidden>
+  <section class="card" id="results" data-pane="play" hidden>
     <div class="res-top">
       <svg class="medal" viewBox="0 0 88 88" aria-hidden="true">
         <circle cx="44" cy="44" r="40" fill="var(--chip)"/>
@@ -429,7 +450,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     </div>
   </section>
   <!-- BOARD -->
-  <section class="card" id="board" hidden>
+  <section class="card" id="board" data-pane="rank" hidden>
     <div class="sec-h" style="margin:0"><span class="lbl">Leaderboard</span><button class="link" id="bRefresh" type="button" style="margin:0">Шинэчлэх</button></div>
     <div class="filters">
       <label class="fld"><span>Хугацаа</span><select id="fPeriod"><option value="week">Сүүлийн 7 хоног</option><option value="all">Бүх цаг үе</option></select></label>
@@ -448,6 +469,7 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
     <div>GeoLingo — IGCSE 0460 · 431 үг · AS 9696 · 354 үг</div>
   </footer>
 </main>
+<nav class="tabs" id="tabs" aria-label="Цэс" hidden><button type="button" data-tab="play" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v15H6a2 2 0 0 0-2 2zm0 0A2 2 0 0 0 6 22h13v-4"/><path d="M9 8h6M9 11h4"/></svg><span>Words</span></button><button type="button" data-tab="duel" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5M13 19l6-6M16 16l4 4M19 21l2-2M9.5 17.5L21 6V3h-3L6.5 14.5M11 19l-6-6M8 16l-4 4M5 21l-2-2"/></svg><span>Battle</span></button><button type="button" data-tab="rank" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg><span>Rank</span></button><button type="button" data-tab="me" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span>Profile</span></button></nav>
 <div class="ov" id="cdOv" hidden role="dialog" aria-modal="true" aria-label="Тэмцээн эхэлж байна"><div class="cd"><div class="vs" id="cdVs"></div><div class="n" id="cdN">3</div><div class="muted" style="font-size:13px">Бэлдээрэй!</div></div></div>
 <div class="ov" id="lvUp" hidden role="dialog" aria-modal="true" aria-labelledby="lvName">
   <canvas class="conf" id="conf"></canvas>
@@ -576,7 +598,7 @@ function start(){
   pool=shuffle(W.filter(w=>chosen.has(w.t)),poolRnd);score=streak=right=total=0;missed=[];left=dur;
   $("oppBox").hidden=$("tug").hidden=!DUEL;$("quit").textContent=DUEL?"Бууж өгөх":"Тоглоомыг дуусгах";
   if(DUEL){left=duelLeft();$("oName").textContent=DUEL.opp?DUEL.opp.name:"Найз";$("oScore").textContent=0;$("tugI").style.width="50%";}
-  $("start").hidden=true;$("duel").hidden=true;$("vsr").hidden=true;$("dAgain").hidden=true;$("results").hidden=true;$("play").hidden=false;document.querySelectorAll("#lvl button").forEach(b=>b.disabled=true);$("login").hidden=true;$("board").hidden=true;
+  $("start").hidden=true;$("vsr").hidden=true;$("dAgain").hidden=true;$("results").hidden=true;$("play").hidden=false;document.querySelectorAll("#lvl button").forEach(b=>b.disabled=true);setTab("play");document.body.classList.add("ingame");
   window.scrollTo({top:$("play").offsetTop-20,behavior:"smooth"});
   hud();next();clearInterval(timer);
   if(DUEL){timer=setInterval(()=>{const l=duelLeft();if(l!==left){left=l;hud()}if(left<=0)end()},250);duelLoop();}
@@ -667,7 +689,7 @@ function answer(o,b){
     $("flash").textContent="Зөв хариулт: "+cur.en+" — "+cur.mn;$("flash").className="flash no";hud();setTimeout(next,1500)}
 }
 function end(){
-  clearInterval(timer);$("play").hidden=true;$("results").hidden=false;document.querySelectorAll("#lvl button").forEach(b=>b.disabled=false);if(ONLINE){$("board").hidden=false;}
+  clearInterval(timer);$("play").hidden=true;$("results").hidden=false;document.body.classList.remove("ingame");document.querySelectorAll("#lvl button").forEach(b=>b.disabled=false);if(ONLINE){$("board").hidden=false;}
   $("rScore").textContent=score;
   const acc=total?Math.round(right/total*100):0;
   $("rRank").textContent=acc>=90&&total>=8?"Мэргэшсэн газарзүйч":acc>=70?"Туршлагатай аялагч":acc>=40?"Судлаач":"Эхлэгч";
@@ -706,6 +728,10 @@ const WD = ["Ня","Да","Мя","Лх","Пү","Ба","Бя"];
 function renderProfile() {
   const p = prof, has = !!(p && p.level === LEVEL);
   ["pTitle","pFire","pXpWrap","pDays"].forEach(id => $(id).hidden = !has);
+  $("mini").hidden = !me; $("miniBonus").hidden = true;
+  if (me) { $("miniN").textContent = me.name; $("miniR").textContent = me.cls; $("miniF").textContent = ""; $("miniB").innerHTML = '<span class="avatar">' + me.name.charAt(0).toUpperCase() + '</span>'; }
+  if (has) { const j = rankIdx(p.xp); $("miniB").innerHTML = badgeSVG(j); $("miniR").textContent = "★ " + RANKS[j].n + " · " + fmt(p.xp) + " оноо"; $("miniF").textContent = p.streak ? "🔥 " + p.streak : "";
+    $("miniBonus").hidden = !p.nextBonus; if (p.nextBonus) $("miniBonus").textContent = "🎁 Өнөөдрийн эхний тоглоомд +" + p.nextBonus + " бонус"; }
   if (!has) { $("pBonus").hidden = true; $("pBadge").innerHTML = '<span class="avatar">' + (me ? me.name.charAt(0).toUpperCase() : "") + '</span>'; return; }
   const i = rankIdx(p.xp), R = RANKS[i], N = RANKS[i + 1];
   $("pBadge").innerHTML = badgeSVG(i);
@@ -745,6 +771,7 @@ function renderWho() {
   $("go").disabled = !me || W.filter(w => chosen.has(w.t)).length < 4;
   $("go").firstChild.textContent = me ? "Тоглож эхлэх " : "Эхлээд нэвтэрнэ үү ";
   if (typeof showDuelCard === "function") showDuelCard();
+  if (typeof paneLogin === "function") paneLogin();
 }
 const ERR = { need_new_pin: "Анх удаа нэвтэрч байна. Өөрийн 4 оронтой PIN (жишээ: 2580) зохиож бичээд дахин Нэвтрэх дарна уу.", cls: "Ангиа жагсаалтаас сонгоно уу.", missing: "Нэр, ангиа бөглөнө үү.", unknown: "Энэ нэр, анги жагсаалтад алга. Багшдаа хандана уу.", bad_pin: "PIN буруу байна. Мартсан бол багшдаа хандаж PIN-ээ шинэчлүүлээрэй.", too_long: "Нэр эсвэл анги хэт урт байна." };
 $("loginForm").addEventListener("submit", async e => {
@@ -848,7 +875,7 @@ async function loadBoard() {
 }
 ["fPeriod", "fCls", "fTopic"].forEach(id => $(id).addEventListener("change", loadBoard));
 $("bRefresh").onclick = loadBoard;
-$("toBoard").onclick = () => window.scrollTo({ top: $("board").offsetTop - 20, behavior: "smooth" });
+$("toBoard").onclick = () => setTab("rank");
 
 async function submitScore() {
   if (!ONLINE || !me) return;
@@ -869,13 +896,33 @@ async function submitScore() {
   } catch (e) { pending([...pending(), data]); pl.textContent = "Интернэт тасарсан тул оноог дараа нь автоматаар илгээнэ."; }
 }
 
+/* ===== ТАБУУД: Words · Battle · Rank · Profile ===== */
+function setTab(t) {
+  if (!ONLINE) return;
+  document.body.dataset.tab = t;
+  document.querySelectorAll("#tabs button").forEach(b => b.setAttribute("aria-pressed", b.dataset.tab === t));
+  try { sessionStorage.setItem("gl-tab", t); } catch (e) {}
+}
+$("mini").onclick = () => { setTab("me"); window.scrollTo({ top: Math.max(0, $("main").offsetTop - 60) }); };
+function paneLogin() { $("login").dataset.pane = me ? "me" : "me play duel"; }
+if (ONLINE) {
+  document.body.classList.add("tabbed"); $("tabs").hidden = false;
+  $("tabs").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+    const t = b.dataset.tab, same = document.body.dataset.tab === t; setTab(t);
+    if (t === "rank" && !same) loadBoard();
+    if (t === "play" && same && !$("results").hidden) $("menu").click();
+    window.scrollTo({ top: Math.max(0, $("main").offsetTop - 60), behavior: same ? "smooth" : "auto" }); });
+  let t0 = "play"; try { t0 = sessionStorage.getItem("gl-tab") || "play"; } catch (e) {}
+  setTab(t0);
+}
+
 /* ===== ТЭМЦЭЭН (найзтайгаа зэрэг 2 минут) ===== */
 const DUEL_SEC = 120;
 let dLoop = null, dBusy = false, dRtt = 1e9, dSaved = null;
 const DERR = { no_room: "Ийм кодтой тэмцээн олдсонгүй. Кодоо шалгаарай.", full: "Энэ тэмцээнд 2 хүн аль хэдийн орсон байна.", self: "Энэ таны өөрийн код. Найздаа хэлээрэй." };
 const srvNow = () => Date.now() + (DUEL ? DUEL.off : 0);
 const duelLeft = () => Math.max(0, Math.ceil((DUEL.start + DUEL_SEC * 1000 - srvNow()) / 1000));
-function showDuelCard() { $("duel").hidden = !(ONLINE && me && !$("start").hidden); }
+function showDuelCard() { $("duel").hidden = !(ONLINE && me); }
 async function dApi(p) {
   const t0 = Date.now(), r = await apiGet(Object.assign({ code: DUEL ? DUEL.code : "", tok: DUEL ? DUEL.tok : "" }, p)), t1 = Date.now();
   if (r && r.ok && r.now) {
@@ -981,7 +1028,7 @@ $("dNew").onclick = duelNew; $("dJoin").onclick = duelJoin;
 $("dCode").addEventListener("keydown", e => { if (e.key === "Enter") duelJoin(); });
 $("dCode").addEventListener("input", () => { $("dCode").value = $("dCode").value.replace(/\D/g, "").slice(0, 4); });
 $("dCancel").onclick = () => { if (DUEL) apiGet({ action: "duel_leave", code: DUEL.code, tok: DUEL.tok }).catch(() => {}); duelStop(); DUEL = null; duelUi("idle"); };
-$("dAgain").onclick = () => { $("results").hidden = true; $("start").hidden = false; $("login").hidden = false; showDuelCard(); $("again").textContent = "Дахин тоглох"; duelNew(); window.scrollTo({ top: $("duel").offsetTop - 20, behavior: "smooth" }); };
+$("dAgain").onclick = () => { $("results").hidden = true; $("start").hidden = false; setTab("duel"); showDuelCard(); $("again").textContent = "Дахин тоглох"; duelNew(); window.scrollTo({ top: $("duel").offsetTop - 20, behavior: "smooth" }); };
 if (ONLINE) { fillTopicFilter(); renderWho(); loadRoster(); checkSession().then(() => { flushPending(); loadBoard(); loadProfile(); }); }
 $("go").addEventListener("click",()=>{ if (SOUND) ac(); });
 $("go").onclick=start;$("again").onclick=()=>{$("again").textContent="Дахин тоглох";start()};
