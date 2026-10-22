@@ -267,11 +267,12 @@ footer{text-align:center;font-size:13px;color:var(--muted);padding-top:8px;displ
   <section class="card" id="login" hidden>
     <form class="who" id="loginForm" hidden>
       <div class="sec-h" style="margin:0"><span class="lbl">Нэвтрэх</span><span class="best">Оноогоо хадгалж Leaderboard-д орохын тулд</span></div>
-      <div class="fields" id="fields">
+      <div class="fields pin" id="fields">
         <label class="fld"><span>Анги</span><select id="inCls" required><option value="">Сонгох</option></select><datalist id="clsList"></datalist></label>
         <label class="fld f-name"><span>Нэр</span><select id="inName" required disabled><option value="">Эхлээд ангиа сонго</option></select></label>
-        <label class="fld" id="pinWrap" hidden><span>PIN</span><input id="inPin" inputmode="numeric" maxlength="8" placeholder="••••"></label>
+        <label class="fld" id="pinWrap"><span>PIN (4 орон)</span><input id="inPin" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" autocomplete="off" placeholder="••••"></label>
       </div>
+      <p class="muted" id="pinHint" style="font-size:13px;margin:0">Анх удаа нэвтэрч байгаа бол <b>өөрийн 4 оронтой PIN</b>-ээ зохиож бичээрэй. Дараа нь зөвхөн энэ PIN-ээр нэвтэрнэ. PIN-ээ хэнд ч бүү хэл.</p>
       <p class="err" id="loginErr" aria-live="polite"></p>
       <button class="btn wide" id="loginBtn" type="submit">Нэвтрэх</button>
     </form>
@@ -627,7 +628,7 @@ function renderWho() {
   $("go").disabled = !me || W.filter(w => chosen.has(w.t)).length < 4;
   $("go").firstChild.textContent = me ? "Тоглож эхлэх " : "Эхлээд нэвтэрнэ үү ";
 }
-const ERR = { cls: "Ангиа жагсаалтаас сонгоно уу.", missing: "Нэр, ангиа бөглөнө үү.", unknown: "Энэ нэр, анги жагсаалтад алга. Багшдаа хандана уу.", bad_pin: "PIN код буруу байна.", too_long: "Нэр эсвэл анги хэт урт байна." };
+const ERR = { need_new_pin: "Анх удаа нэвтэрч байна. Өөрийн 4 оронтой PIN (жишээ: 2580) зохиож бичээд дахин Нэвтрэх дарна уу.", cls: "Ангиа жагсаалтаас сонгоно уу.", missing: "Нэр, ангиа бөглөнө үү.", unknown: "Энэ нэр, анги жагсаалтад алга. Багшдаа хандана уу.", bad_pin: "PIN буруу байна. Мартсан бол багшдаа хандаж PIN-ээ шинэчлүүлээрэй.", too_long: "Нэр эсвэл анги хэт урт байна." };
 $("loginForm").addEventListener("submit", async e => {
   e.preventDefault();
   const name = $("inName").value.trim(), cls = $("inCls").value.trim(), pin = $("inPin").value.trim();
@@ -635,8 +636,9 @@ $("loginForm").addEventListener("submit", async e => {
   $("loginErr").textContent = ""; $("loginBtn").disabled = true; $("loginBtn").textContent = "Шалгаж байна...";
   try {
     const r = await apiGet({ action: "login", name, cls, pin });
-    if (r.ok) { saveMe({ name: r.name, cls: r.cls, pin }); renderWho(); flushPending(); loadBoard(); loadProfile(); }
-    else { if (r.pinRequired) { $("pinWrap").hidden = false; $("fields").classList.add("pin"); } $("loginErr").textContent = ERR[r.error] || "Нэвтэрч чадсангүй."; }
+    if (r.ok) { saveMe({ name: r.name, cls: r.cls, pin }); $("inPin").value = ""; renderWho(); flushPending(); loadBoard(); loadProfile();
+      if (r.newPin) { const n = document.createElement("p"); n.className = "bonus"; n.textContent = "✓ PIN хадгалагдлаа. Дараагийн удаа энэ PIN-ээр нэвтэрнэ. Мартахгүй байгаарай!"; $("hello").prepend(n); setTimeout(() => n.remove(), 8000); } }
+    else { $("loginErr").textContent = ERR[r.error] || "Нэвтэрч чадсангүй."; if (r.error === "need_new_pin" || r.error === "bad_pin") { $("inPin").value = ""; $("inPin").focus(); } }
   } catch (err) { $("loginErr").textContent = "Интернэт холболтоо шалгаад дахин оролдоно уу."; }
   $("loginBtn").disabled = false; $("loginBtn").textContent = "Нэвтрэх";
 });
@@ -668,7 +670,7 @@ $("inCls").addEventListener("change", () => {
 async function checkSession() {
   if (!me) return;
   try { const r = await apiGet({ action: "login", name: me.name, cls: me.cls, pin: me.pin || "" });
-    if (r && r.ok === false && (r.error === "unknown" || r.error === "bad_pin" || r.error === "cls")) { saveMe(null); prof = null; renderWho(); }
+    if (r && r.ok === false && (r.error === "unknown" || r.error === "bad_pin" || r.error === "cls" || r.error === "need_new_pin")) { saveMe(null); prof = null; renderWho(); }
     else if (r && r.ok && (r.name !== me.name || r.cls !== me.cls)) { saveMe({ name: r.name, cls: r.cls, pin: me.pin }); renderWho(); }
   } catch (e) {}
 }
